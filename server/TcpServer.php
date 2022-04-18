@@ -12,7 +12,7 @@ class TcpServer
     public function __construct()
     {
         //实例化swoole服务
-        $this->server = new Server($this->host, $this->port,SWOOLE_SOCK_TCP);//第三个参数默认是TCP,可不填
+        $this->server = new Server($this->host, $this->port);//第三个参数默认是TCP,可不填
 
         //设置参数 worker_num：全异步IO的，CPU核数的1~4倍；同步IO的，需要根据请求响应时间和系统负载来调整,例如：100-500
         $this->server->set([
