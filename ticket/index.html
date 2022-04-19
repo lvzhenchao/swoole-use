@@ -101,17 +101,15 @@
   var websocket = new WebSocket(wsServer);
 
   websocket.onopen = function (client) {
-   console.log("Connected to WebSocket server.");
-   //发送消息
-   websocket.send("客户端发送的消息");
-  };
-
-  websocket.onclose = function (client) {
-   console.log("Disconnected");
+   websocket.send("success");
   };
 
   websocket.onmessage = function (client) {
    console.log('Retrieved data from server: ' + client.data);
+  };
+
+  websocket.onclose = function (client) {
+   console.log("Disconnected");
   };
 
   websocket.onerror = function (client, e) {
