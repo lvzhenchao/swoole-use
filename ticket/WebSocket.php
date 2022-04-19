@@ -34,9 +34,15 @@ class WebSocketServer
         echo "connestion open : {$request->fd}".PHP_EOL;
     }
 
+    //付款之后，通知所有人我已经买了这些票了
     public function onMessage($ws, $frame) {
-        echo "客户端：{$frame->fd}发来的消息：{$frame->data}".PHP_EOL;
-        $ws->push($frame->fd, "server:服务端已收到你的消息");
+
+        if ($frame->data == "success") {
+            foreach ($ws->connections as $fd) {
+                $ws->push($fd, '选座成功');
+            }
+        }
+
     }
 
     public function onClose($ws, $fd) {
