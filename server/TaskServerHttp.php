@@ -26,7 +26,7 @@ class TaskServerHttp
 
         //监听服务器启动事件
         $this->serv->on('start', function ($server) {
-            echo "Swoole http server is started";
+            echo "Swoole http server is started...";
         });
 
         //监听请求，HTTP服务器只需要关注请求响应即可
@@ -49,7 +49,7 @@ class TaskServerHttp
                 'task' => 'sendSms'
             ];
             $task_id = $this->serv->task($data);
-            $response->end();
+            $response->end("login...");
         });
 
         //处理异步任务(此回调函数在task进程中执行)
@@ -57,10 +57,10 @@ class TaskServerHttp
         //$reactor_id 进程ID
         //$data 传递过来的参数
         $this->serv->on('task', function ($serv, $task_id, $reactor_id, $data) {
-            var_dump($data);
+            print_r($data);
             // 模拟耗时10S的场景
             sleep(10);
-            echo "New AsyncTask[id=$task_id]".PHP_EOL;
+            echo "New 异步任务[id=$task_id]".PHP_EOL;
             //返回任务执行的结果
             $serv->finish("OK");
             // 告诉work进程
@@ -71,8 +71,8 @@ class TaskServerHttp
         //$task_id 任务ID
         //$data [onTask]事件返回的数据
         $this->serv->on('finish', function ($serv, $task_id, $data) {
-            var_dump($data);
-            echo "AsyncTask[$task_id] Finish".PHP_EOL;
+            print_r($data);
+            echo "异步任务[$task_id] Finish".PHP_EOL;
         });
 
         //启动服务
