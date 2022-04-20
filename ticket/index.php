@@ -104,7 +104,11 @@
   sc.get(['5_6','5_5']).status('unavailable');
 
   $("#buy").click(function () {
-   location.href = "success.php";
+      var ids = "";
+      $("#selected-seats li").each(function () {
+          ids = ids+this.id+"|"
+      });
+      location.href = "success.php?ids="+ids;
   });
 
   var wsServer = 'ws://192.168.33.10:9504';
