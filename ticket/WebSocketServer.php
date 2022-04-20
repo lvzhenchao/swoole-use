@@ -1,6 +1,7 @@
 <?php
 namespace server;
 
+use Swoole\Coroutine\Redis;
 use Swoole\WebSocket\Server;
 
 class WebSocketServer
@@ -14,7 +15,10 @@ class WebSocketServer
         //实例化swoole服务
         $this->server = new Server($this->host, $this->port);//第三个参数默认是TCP,可不填
 
-        //设置参数 worker_num：全异步IO的，CPU核数的1~4倍；同步IO的，需要根据请求响应时间和系统负载来调整,例如：100-500
+        $http = $this->server->listen($this->host, 9999, SWOOLE_SOCK_TCP);
+        $http->on("request", [$this, 'onRequest']);
+
+            //设置参数 worker_num：全异步IO的，CPU核数的1~4倍；同步IO的，需要根据请求响应时间和系统负载来调整,例如：100-500
         $this->server->set([
             "worker_num"  => 4,      //设置启动的worker进程数 【默认是CPU的核数】
             "max_request" => 10000,  //设置每个worker进程的最大任务数 【默认值：0 即不会退出进程】
@@ -23,6 +27,7 @@ class WebSocketServer
 
         //监听连接打开事件
         $this->server->on("open", [$this, 'onOpen']);
+//        $this->server->on("request", [$this, 'onRequest']);
         //监听WebSocket消息事件
         $this->server->on("message", [$this, 'onMessage']);
         //监听客户端连接关闭事件
@@ -32,6 +37,19 @@ class WebSocketServer
 
     public function onOpen($ws, $request) {
         echo "connestion open : {$request->fd}".PHP_EOL;
+    }
+
+    public function onRequest($request, $response) {
+        $data = $request->post;
+
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        if ($data) {
+            foreach ($data as $v) {
+                $redis->lPush("dy", $v);
+            }
+        }
+
     }
 
     //付款之后，通知所有人我已经买了这些票了
