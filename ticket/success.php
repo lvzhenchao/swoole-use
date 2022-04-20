@@ -1,3 +1,17 @@
+<?php
+//ids=cart-item-6_10|cart-item-5_10|
+
+if (isset($_GET['ids']) && !empty($_GET['ids'])) {
+    $ids = explode("|", $_GET['ids']);
+    foreach ($ids as $id) {
+        if ($id == "") {
+            continue;
+        }
+        $arr[] = substr($id, 10);
+    }
+    print_r($arr);
+}
+?>
 <!DOCTYPE html>
 <html>
 
