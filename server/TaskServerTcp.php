@@ -3,7 +3,7 @@ namespace server;
 
 use Swoole\Server;
 
-class TaskServer
+class TaskServerTcp
 {
     protected $server = null; //示例server对象
     protected $host   = "0.0.0.0"; //监听对应外网的IP
@@ -77,4 +77,4 @@ class TaskServer
     }
 }
 
-$taskServer = new TaskServer();
+$taskServer = new TaskServerTcp();
