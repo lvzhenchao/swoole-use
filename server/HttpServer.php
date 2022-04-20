@@ -7,7 +7,7 @@ class HttpServer
 {
     protected $server = null; //示例server对象
     protected $host   = "0.0.0.0"; //监听对应外网的IP
-    protected $port   = 9503; //监听端口
+    protected $port   = 6789; //监听端口
 
     public function __construct()
     {
@@ -33,7 +33,31 @@ class HttpServer
 
             //返回内容
             $response->header("Content-Type", "text/html; charset=utf-8");
-            $response->end("我是Swoole Http服务器输出的返回内容");
+            //$response->end("我是Swoole Http服务器输出的返回内容");
+
+            list($controller, $action) = explode('/', trim($request->server['request_uri'], '/'));
+            //根据 $controller, $action 映射到不同的控制器类和方法
+
+            // 控制器首字母大写
+            $controller = ucfirst($controller);
+
+            //判断控制器类是否存在
+            if (file_exists(__DIR__.'/'.str_replace('\\', '/', $controller).'.php')) {
+                require_once __DIR__.'/'.str_replace('\\', '/', $controller).'.php';
+                $obj= new $controller;
+                //判断控制器方法是否存在
+                if (!method_exists($obj, $action)) {
+                    $response->status(404);
+                    $response->end("<meta charset='UTF-8'>兄弟,方法不存在！");
+                } else {
+                    //如果存在此方法，输出结果
+                    $response->end($obj->$action($request));
+                }
+            } else {
+                $response->status(404);
+                $response->end("<meta charset='UTF-8'>兄弟,方法不存在！");
+            }
+
         });
 
         $this->server->start();
