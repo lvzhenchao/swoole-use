@@ -1,3 +1,9 @@
+<?php
+    if (isset($_GET['status'])) {
+        $status = $_GET['status'];
+    }
+?>
+
 <!DOCTYPE html>
 <html>
  <head> 
@@ -22,7 +28,7 @@
      <ul id="selected-seats"></ul> 
      <p>票数：<span id="counter">0</span></p> 
      <p>总计：<b>￥<span id="total">0</span></b></p> 
-     <button class="checkout-button">确定购买</button> 
+     <button id="buy" class="checkout-button">确定购买</button>
      <div id="legend"></div> 
     </div> 
     <div style="clear:both"></div> 
@@ -97,11 +103,15 @@
   //已售出的座位
   sc.get(['5_6','5_5']).status('unavailable');
 
+  $("#buy").click(function () {
+   location.href = "success.php";
+  });
+
   var wsServer = 'ws://192.168.33.10:9504';
   var websocket = new WebSocket(wsServer);
 
   websocket.onopen = function (client) {
-   websocket.send("success");
+      websocket.send("<?php echo $status?>");
   };
 
   websocket.onmessage = function (client) {
