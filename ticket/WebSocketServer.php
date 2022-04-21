@@ -28,7 +28,7 @@ class WebSocketServer
 
         //监听连接打开事件
         $this->server->on("open", [$this, 'onOpen']);
-//        $this->server->on("request", [$this, 'onRequest']);
+        //$this->server->on("request", [$this, 'onRequest']);
         //监听WebSocket消息事件
         $this->server->on("message", [$this, 'onMessage']);
         //监听客户端连接关闭事件
