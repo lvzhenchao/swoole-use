@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Canvas 共享画板</title>
     <style>
         body{
             width: 80%;
