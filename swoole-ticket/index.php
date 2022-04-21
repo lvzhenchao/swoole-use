@@ -121,8 +121,11 @@
 
   websocket.onmessage = function (client) {
    // console.log('Retrieved data from server: ' + client.data);
-      var data = JSON.parse(client.data);
-      sc.get(data).status('unavailable');
+      if (client.data) {
+          var data = JSON.parse(client.data);
+          sc.get(data).status('unavailable');
+      }
+
   };
 
   websocket.onclose = function (client) {
