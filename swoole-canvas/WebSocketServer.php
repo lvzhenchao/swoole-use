@@ -13,7 +13,7 @@ class WebSocketServer
     {
         //实例化swoole服务
         $this->server = new Server($this->host, $this->port);//第三个参数默认是TCP,可不填
-        
+
         //设置参数 worker_num：全异步IO的，CPU核数的1~4倍；同步IO的，需要根据请求响应时间和系统负载来调整,例如：100-500
         $this->server->set([
             "worker_num"  => 4,      //设置启动的worker进程数 【默认是CPU的核数】
@@ -33,8 +33,7 @@ class WebSocketServer
     public function onOpen($ws, $request) {
         echo "connestion open : {$request->fd}".PHP_EOL;
     }
-
-
+    
     //前端已经把数据传了过来，需要把传来的数据发送给其他人
     public function onMessage($ws, $frame) {
         foreach ($ws->connections as $fd) {
