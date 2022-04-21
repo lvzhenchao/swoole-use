@@ -7,7 +7,7 @@ class WebSocketServer
 {
     protected $server = null; //示例server对象
     protected $host   = "0.0.0.0"; //监听对应外网的IP
-    protected $port   = 9504; //监听端口
+    protected $port   = 9505; //监听端口
 
     public function __construct()
     {
@@ -31,9 +31,10 @@ class WebSocketServer
     }
 
     public function onOpen($ws, $request) {
-        echo "connestion open : {$request->fd}".PHP_EOL;
+        echo "客户端连接 : {$request->fd}".PHP_EOL;
     }
-    
+
+
     //前端已经把数据传了过来，需要把传来的数据发送给其他人
     public function onMessage($ws, $frame) {
         foreach ($ws->connections as $fd) {
