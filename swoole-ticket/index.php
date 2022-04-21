@@ -1,4 +1,5 @@
 <?php
+    $status = '';
     if (isset($_GET['status']) && !empty($_GET['status'])) {
         $status = $_GET['status'];
     }
@@ -101,7 +102,7 @@
    }
   });
   //已售出的座位
-  sc.get(['5_6','5_5']).status('unavailable');
+  // sc.get(['5_6','5_5']).status('unavailable');
 
   $("#buy").click(function () {
       var ids = "";
@@ -119,7 +120,9 @@
   };
 
   websocket.onmessage = function (client) {
-   console.log('Retrieved data from server: ' + client.data);
+   // console.log('Retrieved data from server: ' + client.data);
+      var data = JSON.parse(client.data);
+      sc.get(data).status('unavailable');
   };
 
   websocket.onclose = function (client) {
