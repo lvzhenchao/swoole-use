@@ -57,8 +57,12 @@ class WebSocketServer
     public function onMessage($ws, $frame) {
 
         if ($frame->data == "success") {
+            $redis = new Redis();
+            $redis->connect('127.0.0.1', 6379);
+            $data = $redis->lRange("dy", 0, -1);
+
             foreach ($ws->connections as $fd) {
-                $ws->push($fd, '选座成功');
+                $ws->push($fd, json_encode($data));
             }
         }
 
