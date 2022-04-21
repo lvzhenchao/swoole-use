@@ -56,10 +56,6 @@ ws.onclose = function (e) {
     alert("连接已关闭...");
 };
 
-//5、错误
-ws.onerror = function (client, e) {
-    alert('Error occured: ' + client.data);
-};
 
 //此方法是向后端发送数据方法
 function sendPoint(e,type) {
