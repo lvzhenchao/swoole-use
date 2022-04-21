@@ -24,7 +24,7 @@ el.onmousedown = function (e) {
 
 el.onmousemove = function (e) {
     if(isDrawing){
-        ctx.lineTo(e.clientX,e.clientY);//ineTo(x,y) 定义线条【结束坐标】
+        ctx.lineTo(e.clientX,e.clientY);//lineTo(x,y) 定义线条【结束坐标】
         ctx.stroke();//stroke() 方法来【绘制线条】
     }
 };
