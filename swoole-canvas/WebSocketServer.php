@@ -24,7 +24,6 @@ class WebSocketServer
 
         //监听连接打开事件
         $this->server->on("open", [$this, 'onOpen']);
-        $this->server->on("request", [$this, 'onRequest']);
         //监听WebSocket消息事件
         $this->server->on("message", [$this, 'onMessage']);
         //监听客户端连接关闭事件
@@ -36,21 +35,12 @@ class WebSocketServer
         echo "connestion open : {$request->fd}".PHP_EOL;
     }
 
-    public function onRequest($request, $response) {
-        $data = $request->post;
 
-
-    }
-
-    //付款之后，通知所有人我已经买了这些票了
+    //前端已经把数据传了过来，需要把传来的数据发送给其他人
     public function onMessage($ws, $frame) {
-
-        if ($frame->data == "success") {
-            foreach ($ws->connections as $fd) {
-                $ws->push($fd, '选座成功');
-            }
+        foreach ($ws->connections as $fd) {
+            $ws->push($fd, $frame->data);//向 WebSocket 客户端连接推送数据，长度最大不得超过 2M
         }
-
     }
 
     public function onClose($ws, $fd) {
