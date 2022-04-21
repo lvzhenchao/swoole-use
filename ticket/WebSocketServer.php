@@ -15,6 +15,7 @@ class WebSocketServer
         //实例化swoole服务
         $this->server = new Server($this->host, $this->port);//第三个参数默认是TCP,可不填
 
+        //监听多端口
         $http = $this->server->listen($this->host, 9999, SWOOLE_SOCK_TCP);
         $http->on("request", [$this, 'onRequest']);
 
