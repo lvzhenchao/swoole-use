@@ -38,6 +38,16 @@ class WebSocketServer
 
     public function onOpen($ws, $request) {
         echo "connestion open : {$request->fd}".PHP_EOL;
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        $data = $redis->lRange("dy", 0, -1);
+
+        if ($data) {
+            foreach ($ws->connections as $fd) {
+                $ws->push($fd, json_encode($data));
+            }
+        }
+
     }
 
     public function onRequest($request, $response) {
