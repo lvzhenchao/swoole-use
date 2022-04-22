@@ -101,6 +101,16 @@
     }
    }
   });
+
+ //计算总金额
+ function recalculateTotal(sc) {
+     var total = 0;
+     sc.find('selected').each(function () {
+         total += price;
+     });
+
+     return total;
+ }
   //已售出的座位
   // sc.get(['5_6','5_5']).status('unavailable');
 
@@ -138,13 +148,5 @@
 
  });
 
- //计算总金额
- function recalculateTotal(sc) {
-  var total = 0;
-  sc.find('selected').each(function () {
-   total += price;
-  });
 
-  return total;
- }
 </script>
