@@ -38,6 +38,9 @@ class WebSocketServer
     //前端已经把数据传了过来，需要把传来的数据发送给其他人
     public function onMessage($ws, $frame) {
         foreach ($ws->connections as $fd) {
+            if ($fd == $frame->fd) {//排除掉自己
+                continue;
+            }
             $ws->push($fd, $frame->data);//向 WebSocket 客户端连接推送数据，长度最大不得超过 2M
         }
     }
