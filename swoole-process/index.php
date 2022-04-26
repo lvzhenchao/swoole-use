@@ -17,6 +17,7 @@ $connect = [
 
 foreach($citys as $city){
 
+    //获取数据，主要是CPU计算的消耗，所以使用多进程；爬虫是计算力的问题，多核的问题
     $process = new Swoole\Process(function($worker)use($city,$page){
         echo  'start city...'.$city.PHP_EOL;
         for($i=1;$i<$page;$i++){
@@ -38,6 +39,8 @@ foreach($workers as $worker){
         insert_data($data,$connect);
     }
 }
+
+//协程是解决IO问题；类似于异步效果
 
 function insert_data($data,$connect){
     $data = json_decode($data,true);
