@@ -1,16 +1,60 @@
 <?php
 use Swoole\Process;
 
-$citys = ["gulou"/*, "jianye", "xuanwu", "yuhuatai"*/];
+$start_time = time();
 
-foreach ($citys as $city) {
-    $process = new Process(function () use ($city) {
-        $url = "https://nj.lianjia.com/zufang/".$city."/pg1/#contentList";
+$citys = ['gulou','jianye','xuanwu','yuhuatai','jiangning','pukou'];
 
-        get_data($url);
+$page = 10;
+
+$connect = [
+    'host'=>'127.0.0.1',
+    'port'=>3306,
+    'user'=>'root',
+    'password'=>'lampol',
+    'database'=>'lianjia'
+];
+
+foreach($citys as $city){
+
+    $process = new Swoole\Process(function($worker)use($city,$page){
+        echo  'start city...'.$city.PHP_EOL;
+        for($i=1;$i<$page;$i++){
+            echo 'start page...'.$i.PHP_EOL;
+            $url = 'https://nj.lianjia.com/zufang/'.$city.'/pg'.$i;
+            $data = get_data($url);
+            $worker->push(json_encode($data,JSON_UNESCAPED_UNICODE));
+        }
+    });
+    $process->useQueue();
+    $pid = $process->start();
+    $workers[$pid] = $process;
+
+}
+
+foreach($workers as $worker){
+    for($i=1;$i<$page;$i++){
+        $data = $worker->pop();
+        insert_data($data,$connect);
+    }
+}
+
+function insert_data($data,$connect){
+    $data = json_decode($data,true);
+
+    $scheduler = new Swoole\Coroutine\Scheduler();
+    $scheduler->add(function()use($data,$connect){
+        $mysql = new Swoole\Coroutine\MySQL();
+        $mysql->connect($connect);
+
+        foreach($data as $v){
+            $stmt = $mysql->prepare('INSERT INTO info (title,address,square,direction,huxing,price)VALUES(?,?,?,?,?,?)');
+            $stmt->execute([$v['title'],$v['address'],$v['square'],$v['direction'],$v['huxing'],$v['price']]);
+        }
     });
 
-    $process->start();
+    $scheduler->start();
+
 }
 
 
