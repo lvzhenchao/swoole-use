@@ -5,15 +5,20 @@ use Swoole\Client;
 
 class TcpClient
 {
+
+    public function __construct()
+    {
+        $this->index();
+    }
     public function index()
     {
         $client = new Client(SWOOLE_SOCK_TCP);
 
-        if (!$client->connect("127.0.0.1", 9501, 0.5)){
+        if (!$client->connect("127.0.0.1", 9503, 0.5)){
             die("链接失败");
         }
 
-        if (!$client->send("我是客户端")) {
+        if (!$client->send("1370164516@qq.com")) {
             echo "发送失败";
         }
 
@@ -28,3 +33,5 @@ class TcpClient
         exit();
     }
 }
+
+$tcpClientr = new TcpClient();
