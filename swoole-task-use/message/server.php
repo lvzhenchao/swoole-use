@@ -107,7 +107,17 @@ class Server
 
 $server = new Server();
 
+// netstat -nltp 查看TCP端口号
 
+// ps -ef | gerp php  这个主要看进程 【process status】
+// ps -ef | grep 'server.php' | grep -v 'grep'
+
+// pstree -p 22192 查看进程树
+
+// 因为我们设了置worker进程的max_request=4，一个worker进程在完成最大请求次数任务后将自动退出，
+// 进程退出会释放所有的内存和资源，这样的机制主要是解决PHP进程内存溢出的问题
+
+// task_worker_num 最大值不得超过 SWOOLE_CPU_NUM * 1000。
 
 
 
