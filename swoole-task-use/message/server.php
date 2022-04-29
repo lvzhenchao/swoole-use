@@ -67,7 +67,7 @@ class Server
         if ($result === false) {
             echo "任务分配失败 Task".$result.PHP_EOL;
         } else {
-            echo "任务分配成功".$result.PHP_EOL;
+            echo "任务分配成功".var_dump($result).PHP_EOL;
         }
 
         echo "######".PHP_EOL.PHP_EOL;
